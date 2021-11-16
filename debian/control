@@ -1,0 +1,24 @@
+Source: accomplishments-daemon
+Section: utils
+Priority: optional
+Maintainer: Dani Llewellyn <diddledani@ubuntu.com>
+Build-Depends: debhelper-compat (= 13),
+ unzip,
+ cmake,
+ llvm-dev,
+ xz-utils,
+ zip
+Standards-Version: 4.5.1
+Homepage: https://github.com/UbuntuAccomplishments
+Vcs-Browser: https://github.com/UbuntuAccomplishments/daemon
+Vcs-Git: https://github.com/UbuntuAccomplishments/daemon.git
+Rules-Requires-Root: no
+
+Package: accomplishments-daemon
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: ubuntu-community-accomplishments,
+ ubuntu-desktop-accomplishments
+Description: Background daemon for running the Ubuntu Accomplishments system
+ This is the background daemon process that is required to run the Ubuntu
+ Accomplishments system.
