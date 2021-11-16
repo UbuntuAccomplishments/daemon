@@ -3,9 +3,10 @@ Section: utils
 Priority: optional
 Maintainer: Dani Llewellyn <diddledani@ubuntu.com>
 Build-Depends: debhelper-compat (= 11),
- unzip,
  cmake,
+ git,
  llvm-dev,
+ unzip,
  xz-utils,
  zip
 Standards-Version: 4.5.1

@@ -1,5 +1,60 @@
-accomplishments-daemon (0.1) unstable; urgency=medium
+accomplishments-daemon (0.4~focal1) focal; urgency=medium
 
-  * Initial Release.
+  * Initial Dart-based rewrite Release.
 
  -- Dani Llewellyn <diddledani@ubuntu.com>  Tue, 16 Nov 2021 20:56:03 +0000
+accomplishments-daemon (0.3~quantal2) quantal; urgency=low
+
+  * Redoing the upload to fix the incorrect distroseries, no other changes 
+
+ -- Matthew Fischer <matthew.fischer@ubuntu.com>  Wed, 26 Sep 2012 16:28:23 -0600
+
+accomplishments-daemon (0.3~precise1) precise; urgency=low
+
+  [Jono Bacon]
+  * Client and Developer documentation added
+  * Potential non-starter issue with trophy publishing share check 
+    (LP: #1036961)
+  * Re-purpose code for new version of quickly (LP: #1040248)
+
+  [Rafał Cieślak]
+  * The daemon needs a more elgant way to launch/stop  (LP: #1033453)
+  * Fix for pynotify when daemon alsi run deamonized
+  * Client and Developer documentation added
+  * Daemon launcher should have a --restart option (LP: #1033685)
+  * Daemon doesn't have the opportunity to recreate the config 
+    directories if they are deleted when it is already running (LP: #1031908)
+  * Removed need for running gnome-session process, which enables distros not
+    based on gnome to run the daemon successfully.
+
+  [Matthew Fischer]
+  * parsing errors in an accomplishment file will crash the daemon 
+    (LP: #1024041)
+  * run_script(s) unit tests succeed in pbuilder/build system but fail when
+    run from the command line (LP: #1030208)
+  * Unit Tests added
+  * daemon code clean-up to meet pep8 guidelines (LP: #947271)
+  * Rename the api from *_completed() to *_accomplished() for better
+    consistency. (LP: #1024085)
+
+  [Brian Mastell]
+  * Get Ubuntu One setting from daemon for hiding notification (LP: #1031913)
+
+  [Jason Robinson]
+  * The "Hide Ubuntu One notifications" preference has no immediate effect.
+    (LP: #1011903)
+
+ -- Matthew Fischer <matthew.fischer@ubuntu.com>  Wed, 26 Sep 2012 16:19:36 -0600
+
+accomplishments-daemon (0.2) precise; urgency=low
+
+  * New release (0.2).
+
+ -- Jono Bacon <jono@ubuntu.com>  Fri, 08 Jun 2012 16:26:53 -0700
+
+accomplishments-daemon (0.1) precise; urgency=low
+
+  [ Jono Bacon ]
+  * Initial release.
+
+ -- Jono Bacon <jono@ubuntu.com>  Mon, 23 Apr 2012 22:25:27 -0700
