@@ -368,7 +368,7 @@ class Accomplishments {
       }
 
       final collections = dir.list();
-      await for (var element in collections) {
+      for (var element in await collections.toList()) {
         final collection = path.basename(element.path);
         if (accomDB.collections.containsKey(collection)) {
           return;
@@ -395,7 +395,7 @@ class Accomplishments {
         final setsslist = Directory(langdefaultpath).list();
         var accno = 0;
 
-        await for (var setssfile in setsslist) {
+        for (var setssfile in await setsslist.toList()) {
           final accomset = path.basename(setssfile.path);
           if (path.extension(accomset) == '.accomplishment') {
             final accompath = path.join(langdefaultpath, accomset);
@@ -467,7 +467,7 @@ class Accomplishments {
             accomDB.sets[setID] = setdata;
             final setdir = path.join(langdefaultpath, accomset);
             final accomfiles = Directory(setdir).list();
-            await for (var element in accomfiles) {
+            for (var element in await accomfiles.toList()) {
               final accomfile = path.basename(element.path);
               final accompath = path.join(langdefaultpath, accomset, accomfile);
               var translatedpath =
@@ -542,7 +542,7 @@ class Accomplishments {
         final extrainfodir = path.join(collpath, "extrainformation");
         final extrainfolist = Directory(extrainfodir).list();
         Map<String, Map<String, dynamic>> ei = {};
-        await for (var element in extrainfolist) {
+        for (var element in await extrainfolist.toList()) {
           final extrainfofile = path.basename(element.path);
           final extrainfopath = path.join(extrainfodir, extrainfofile);
           final data = await File(extrainfopath).readAsString();
@@ -832,31 +832,12 @@ class Accomplishments {
   }
 
   registerTrophyDir(String trophydirpath) async {
-    var folderIsSynced = false;
-
-    // TODO: get folders
-    // TODO: check folders are synced
-
-    if (!folderIsSynced) {
-      stdout.writeln(
-          "...the '$trophydirpath' folder is not synced with the Matrix");
-      //stdout.writeln("...creating the share folder on Ubuntu One");
-      final trophydir = File(trophydirpath);
-      if (!await trophydir.exists()) {
-        trophydir.create(recursive: true);
-      }
-
-      // TODO: setup sync
-      return;
+    final trophydir = File(trophydirpath);
+    if (!await trophydir.exists()) {
+      trophydir.create(recursive: true);
     }
 
-    var folderIdShared = false;
-    if (!folderIdShared) {
-      // TODO: setup sharing
-      return;
-    }
-
-    // TODO: refresh share data
+    return;
   }
 
   Future<void> createTrophyFile(String accomID) async {
