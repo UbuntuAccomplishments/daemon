@@ -40,8 +40,6 @@ class Accomplishments {
         .writeln("Accomplishments install paths: ${config.accomsInstallpaths}");
     stdout.writeln("Trophies path: ${config.trophiesPath}");
 
-    reloadAccomDatabase();
-
     signer = Signer(
         RSASigner(RSASignDigest.SHA256, publicKey: config.productionPubkey));
   }

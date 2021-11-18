@@ -10,6 +10,7 @@ void main(List<String> arguments) async {
   final dbusService = AccomDBus();
   await client.registerObject(dbusService);
 
+  await dbusService.api.reloadAccomDatabase();
   await dbusService.api.runScripts([]);
   await dbusService.api.checkSignatures();
 
