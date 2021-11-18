@@ -397,11 +397,11 @@ class Accomplishments {
         var accno = 0;
 
         for (var setssfile in await setsslist.toList()) {
-          final accomset = path.basename(setssfile.path);
+          var accomset = path.basename(setssfile.path);
           if (path.extension(accomset) == '.accomplishment') {
             stdout.writeln('Found accomplishment $collection/$accomset');
 
-            final accompath = path.join(langdefaultpath, accomset);
+            var accompath = path.join(langdefaultpath, accomset);
             var translatedpath =
                 path.join(collpath, Intl.systemLocale, accomset);
             String readpath;
@@ -421,14 +421,14 @@ class Accomplishments {
               }
             }
 
-            final data = await File(readpath).readAsString();
-            final accomplishment = Accomplishment.fromJson(jsonDecode(data));
+            var data = await File(readpath).readAsString();
+            var accomplishment = Accomplishment.fromJson(jsonDecode(data));
 
-            final accomID =
+            var accomID =
                 "$collection/${accomset.substring(0, accomset.length - 15)}";
             accomplishment.id = accomID;
 
-            final author = accomplishment.author;
+            var author = accomplishment.author;
             if (author != "") {
               collauthors.add(author);
             }
@@ -447,7 +447,7 @@ class Accomplishments {
 
             List<String> cats = accomplishment.category.split(",");
             for (var cat in cats) {
-              final catsplitted = cat.trim().split(":");
+              var catsplitted = cat.trim().split(":");
               accomplishment.categories.add(cat.trim());
               if (collcategories.containsValue(catsplitted[0])) {
                 continue;
@@ -465,18 +465,18 @@ class Accomplishments {
             accomDB.accomplishments[accomID] = accomplishment;
             accno = accno + 1;
           } else {
-            final setID = "$collection:$accomset";
+            var setID = "$collection:$accomset";
             stdout.writeln('Found accomplishment set $setID');
 
-            final setdata = {'type': "set", 'name': accomset};
+            var setdata = {'type': "set", 'name': accomset};
             accomDB.sets[setID] = setdata;
-            final setdir = path.join(langdefaultpath, accomset);
-            final accomfiles = Directory(setdir).list();
+            var setdir = path.join(langdefaultpath, accomset);
+            var accomfiles = Directory(setdir).list();
             for (var element in await accomfiles.toList()) {
-              final accomfile = path.basename(element.path);
+              var accomfile = path.basename(element.path);
               stdout.writeln('Found accomplishment $accomset/$accomfile');
 
-              final accompath = path.join(langdefaultpath, accomset, accomfile);
+              var accompath = path.join(langdefaultpath, accomset, accomfile);
               var translatedpath =
                   path.join(collpath, Intl.systemLocale, accomset, accomfile);
               var readpath = "";
@@ -495,10 +495,10 @@ class Accomplishments {
                   langused = langdefault;
                 }
               }
-              final data = await File(readpath).readAsString();
-              final accomplishment = Accomplishment.fromJson(jsonDecode(data));
+              var data = await File(readpath).readAsString();
+              var accomplishment = Accomplishment.fromJson(jsonDecode(data));
 
-              final accomID =
+              var accomID =
                   "$collection/${accomfile.substring(0, accomfile.length - 15)}";
               accomplishment.id = accomID;
 
@@ -520,11 +520,11 @@ class Accomplishments {
 
               if (accomplishment.category != "") {
                 String accomcategory = accomplishment.category;
-                final cats =
+                var cats =
                     accomcategory.split(",").map<String>((c) => c.trim());
                 accomplishment.categories = cats.toList();
                 for (var cat in cats) {
-                  final catsplitted = cat.trim().split(":");
+                  var catsplitted = cat.trim().split(":");
                   if (collcategories.containsValue(catsplitted[0])) {
                     continue;
                   }
@@ -546,13 +546,13 @@ class Accomplishments {
           }
         }
 
-        final extrainfodir = path.join(collpath, "extrainformation");
-        final extrainfolist = Directory(extrainfodir).list();
+        var extrainfodir = path.join(collpath, "extrainformation");
+        var extrainfolist = Directory(extrainfodir).list();
         Map<String, Map<String, dynamic>> ei = {};
         for (var element in await extrainfolist.toList()) {
-          final extrainfofile = path.basename(element.path);
-          final extrainfopath = path.join(extrainfodir, extrainfofile);
-          final data = await File(extrainfopath).readAsString();
+          var extrainfofile = path.basename(element.path);
+          var extrainfopath = path.join(extrainfodir, extrainfofile);
+          var data = await File(extrainfopath).readAsString();
           ei[extrainfofile] = jsonDecode(data);
         }
 
