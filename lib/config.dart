@@ -47,7 +47,12 @@ class AccomConfig {
       if (snapdir != null &&
           snapdir != "" &&
           snapdir.contains('ubuntu-accomplishments')) {
-        dataDirPath = path.join(snapdir, "usr", "share", "accomplishments");
+        dataDirPath = path.join(
+          path.dirname(snapdir),
+          "usr",
+          "share",
+          "accomplishments",
+        );
         configDirPath = path.join(path.dirname(snapuserdata!), 'current',
             '.config', 'accomplishments');
       }
