@@ -734,7 +734,7 @@ class Accomplishments {
         scriptsRunner.scriptsQueue.add(i);
       }
     }
-    scriptsRunner.startScriptRunner();
+    await scriptsRunner.startScriptRunner();
   }
 
   Future<List<Map<String, dynamic>>> buildViewerDatabase() async {
