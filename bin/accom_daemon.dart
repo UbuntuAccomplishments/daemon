@@ -12,7 +12,6 @@ void main(List<String> arguments) async {
 
   await dbusService.api.reloadAccomDatabase();
   await dbusService.api.runScripts([]);
-  await dbusService.api.checkSignatures();
 
   Timer.periodic(Duration(hours: 1), (_) => dbusService.api.runScripts([]));
 }
