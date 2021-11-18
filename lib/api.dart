@@ -762,9 +762,15 @@ class Accomplishments {
     for (var accomID in accomDB.accomplishments.keys) {
       final accomFile = File(path.join(config.trophiesPath, '$accomID.trophy'));
       final accomAscFile = File('${accomFile.path}.asc');
-      if (getAccomNeedsSigning(accomID) &&
-          (await accomFile.exists()) &&
-          !(await accomAscFile.exists())) {
+      if (getAccomNeedsSigning(accomID) && (await accomFile.exists())) {
+        final ascExists = await accomAscFile.exists();
+        if (ascExists && await getIsAscCorrect(accomAscFile.path)) {
+          continue;
+        }
+        if (ascExists) {
+          await accomAscFile.delete();
+        }
+
         stdout.writeln(
             'Requesting signature from accomplishments service for $accomID');
         final response = await http.post(
