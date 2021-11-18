@@ -35,18 +35,16 @@ class AccomConfig {
       cacheDirPath =
           path.join(rootdir, "accomplishments", ".cache", "accomplishments");
       autostartDirPath = path.join(configHome.path, "autostart");
-    } else if (snapdir != null &&
-        snapdir != "" &&
-        snapdir.contains('ubuntuaccomplishments')) {
-      dataDirPath = path.join(snapdir, "usr", "share", "accomplishments");
-      mediaDirPath = path.join(dataDirPath, "data", "media");
-      configDirPath = path.join(configHome.path, "accomplishments");
-      cacheDirPath = path.join(cacheHome.path, "accomplishments");
-      autostartDirPath = path.join(configHome.path, "autostart");
     } else {
-      dataDirPath = '/usr/share/accomplishments';
+      if (snapdir != null &&
+          snapdir != "" &&
+          snapdir.contains('ubuntuaccomplishments')) {
+        dataDirPath = path.join(snapdir, "usr", "share", "accomplishments");
+      } else {
+        dataDirPath = '/usr/share/accomplishments';
+      }
       mediaDirPath = path.join(dataDirPath, "data", "media");
-      configDirPath = path.join(configHome.path, "accomplishments");
+      configDirPath = path.join(configHome.path, ".config", "accomplishments");
       cacheDirPath = path.join(cacheHome.path, "accomplishments");
       autostartDirPath = path.join(configHome.path, "autostart");
     }
@@ -133,7 +131,7 @@ class AccomConfig {
     log("...setting accomplishments install paths to: $accomsInstallpaths");
     log('You can set this to different locations in your config file.');
 
-    trophiesPath = path.join(dataDirPath, "trophies");
+    trophiesPath = path.join(configDirPath, "trophies");
     log("...setting trophies path to: $trophiesPath");
 
     if (!Directory(trophiesPath).existsSync()) {
