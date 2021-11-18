@@ -49,6 +49,7 @@ class AccomConfig {
           snapdir.contains('ubuntu-accomplishments')) {
         dataDirPath = path.join(
           path.dirname(snapdir),
+          "current",
           "usr",
           "share",
           "accomplishments",
