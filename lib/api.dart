@@ -362,6 +362,8 @@ class Accomplishments {
     accomDB = AccomDB();
     final installpaths = config.accomsInstallpaths.split(":");
     for (var installpath in installpaths) {
+      stdout.writeln('Scanning for collections in $installpath');
+
       final dir = Directory(path.join(installpath, 'accomplishments'));
       if (!await dir.exists()) {
         continue;
@@ -370,9 +372,8 @@ class Accomplishments {
       final collections = dir.list();
       for (var element in await collections.toList()) {
         final collection = path.basename(element.path);
-        if (accomDB.collections.containsKey(collection)) {
-          return;
-        }
+
+        stdout.writeln('Found collection $collection');
 
         final collpath = path.join(dir.path, collection);
         final aboutpath = path.join(collpath, 'ABOUT');
@@ -398,6 +399,8 @@ class Accomplishments {
         for (var setssfile in await setsslist.toList()) {
           final accomset = path.basename(setssfile.path);
           if (path.extension(accomset) == '.accomplishment') {
+            stdout.writeln('Found accomplishment $collection/$accomset');
+
             final accompath = path.join(langdefaultpath, accomset);
             var translatedpath =
                 path.join(collpath, Intl.systemLocale, accomset);
@@ -463,12 +466,16 @@ class Accomplishments {
             accno = accno + 1;
           } else {
             final setID = "$collection:$accomset";
+            stdout.writeln('Found accomplishment set $setID');
+
             final setdata = {'type': "set", 'name': accomset};
             accomDB.sets[setID] = setdata;
             final setdir = path.join(langdefaultpath, accomset);
             final accomfiles = Directory(setdir).list();
             for (var element in await accomfiles.toList()) {
               final accomfile = path.basename(element.path);
+              stdout.writeln('Found accomplishment $accomset/$accomfile');
+
               final accompath = path.join(langdefaultpath, accomset, accomfile);
               var translatedpath =
                   path.join(collpath, Intl.systemLocale, accomset, accomfile);
@@ -561,9 +568,9 @@ class Accomplishments {
       }
     }
 
-    await updateAllLockedAndAccomplishedStatuses();
+    stdout.writeln('Finished scanning for accomplishments');
 
-    // await createAllTrophyIcons();
+    await updateAllLockedAndAccomplishedStatuses();
 
     if (!testMode) {
       service.accomsCollectionsReloaded();
