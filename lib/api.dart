@@ -735,6 +735,7 @@ class Accomplishments {
       }
     }
     await scriptsRunner.startScriptRunner();
+    await checkSignatures();
   }
 
   Future<List<Map<String, dynamic>>> buildViewerDatabase() async {
