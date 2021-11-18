@@ -127,7 +127,7 @@ class AccomConfig {
   }
 
   void setDefaultConfig() {
-    final accompath = "$configDirPath:/usr/share/accomplishments";
+    final accompath = "$configDirPath:$dataDirPath";
     log('Configuration file not found...creating it!');
 
     hasVerif = false;
