@@ -758,12 +758,15 @@ class Accomplishments {
   }
 
   Future<void> checkSignatures() async {
+    stdout.writeln('Checking for required trophy signatures');
     for (var accomID in accomDB.accomplishments.keys) {
       final accomFile = File(path.join(config.trophiesPath, '$accomID.trophy'));
       final accomAscFile = File('${accomFile.path}.asc');
       if (getAccomNeedsSigning(accomID) &&
           (await accomFile.exists()) &&
           !(await accomAscFile.exists())) {
+        stdout.writeln(
+            'Requesting signature from accomplishments service for $accomID');
         final response = await http.post(
           Uri.parse(
               'https://ubuntuaccomplishments.herokuapp.com/accomplish/$accomID'),
@@ -772,9 +775,10 @@ class Accomplishments {
 
         await accomAscFile.writeAsString(response.body);
 
-        processReceivedTrophyFile(accomAscFile.path);
+        await processReceivedTrophyFile(accomAscFile.path);
       }
     }
+    stdout.writeln('Trophy signatures check has completed');
   }
 
   Future<bool> getPublishedStatus() async {
