@@ -28,6 +28,8 @@ class AccomConfig {
   AccomConfig() {
     final rootdir = Platform.environment['ACCOMPLISHMENTS_ROOT_DIR'];
     final snapdir = Platform.environment['SNAP'];
+    final snapuserdata = Platform.environment['SNAP_USER_DATA'];
+
     if (rootdir != null && rootdir != "") {
       dataDirPath = path.join(rootdir, "data");
       mediaDirPath = path.join(dataDirPath, "media");
@@ -36,17 +38,19 @@ class AccomConfig {
           path.join(rootdir, "accomplishments", ".cache", "accomplishments");
       autostartDirPath = path.join(configHome.path, "autostart");
     } else {
-      if (snapdir != null &&
-          snapdir != "" &&
-          snapdir.contains('ubuntuaccomplishments')) {
-        dataDirPath = path.join(snapdir, "usr", "share", "accomplishments");
-      } else {
-        dataDirPath = '/usr/share/accomplishments';
-      }
+      dataDirPath = '/usr/share/accomplishments';
       mediaDirPath = path.join(dataDirPath, "data", "media");
       configDirPath = path.join(configHome.path, "accomplishments");
       cacheDirPath = path.join(cacheHome.path, "accomplishments");
       autostartDirPath = path.join(configHome.path, "autostart");
+
+      if (snapdir != null &&
+          snapdir != "" &&
+          snapdir.contains('ubuntuaccomplishments')) {
+        dataDirPath = path.join(snapdir, "usr", "share", "accomplishments");
+        configDirPath = path.join(path.dirname(snapuserdata!), 'current',
+            '.config', 'accomplishments');
+      }
     }
 
     final configDir = Directory(configDirPath);
