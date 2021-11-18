@@ -44,7 +44,7 @@ class AccomConfig {
         dataDirPath = '/usr/share/accomplishments';
       }
       mediaDirPath = path.join(dataDirPath, "data", "media");
-      configDirPath = path.join(configHome.path, ".config", "accomplishments");
+      configDirPath = path.join(configHome.path, "accomplishments");
       cacheDirPath = path.join(cacheHome.path, "accomplishments");
       autostartDirPath = path.join(configHome.path, "autostart");
     }
