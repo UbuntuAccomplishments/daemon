@@ -17,10 +17,4 @@ void main(List<String> arguments) async {
       Duration(hours: 1),
       (_) => dbusService.api
           .runScripts([]).then((_) => dbusService.api.checkSignatures()));
-
-  // Oneshot timer for initial startup rescan
-  Timer(
-      Duration(minutes: 5),
-      () => dbusService.api
-          .runScripts([]).then((_) => dbusService.api.checkSignatures()));
 }
