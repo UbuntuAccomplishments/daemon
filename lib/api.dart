@@ -1037,7 +1037,8 @@ class Accomplishments {
     List<String> res = [];
     for (var accom in accoms) {
       var before = accomDB.accomplishments[accom]?.locked ?? true;
-      accomDB.accomplishments[accom]?.locked = checkIfAccomIsLocked(accom);
+      accomDB.accomplishments[accom]?.locked =
+          await checkIfAccomIsLocked(accom);
       if (before && !(accomDB.accomplishments[accom]?.locked ?? true)) {
         res.add(accom);
       }
