@@ -399,7 +399,8 @@ class Accomplishments {
         for (var setssfile in await setsslist.toList()) {
           var accomset = path.basename(setssfile.path);
           if (path.extension(accomset) == '.accomplishment') {
-            stdout.writeln('Found accomplishment $collection/$accomset');
+            var accom = path.basenameWithoutExtension(accomset);
+            stdout.writeln('Found accomplishment $collection/$accom');
 
             var accompath = path.join(langdefaultpath, accomset);
             var translatedpath =
@@ -424,8 +425,7 @@ class Accomplishments {
             var data = await File(readpath).readAsString();
             var accomplishment = Accomplishment.fromJson(jsonDecode(data));
 
-            var accomID =
-                "$collection/${accomset.substring(0, accomset.length - 15)}";
+            var accomID = "$collection/$accom";
             accomplishment.id = accomID;
 
             var author = accomplishment.author;
@@ -473,9 +473,11 @@ class Accomplishments {
             var setdir = path.join(langdefaultpath, accomset);
             var accomfiles = Directory(setdir).list();
             for (var element in await accomfiles.toList()) {
-              var accomfile = path.basename(element.path);
-              stdout.writeln('Found accomplishment $accomset/$accomfile');
+              var accom = path.basenameWithoutExtension(element.path);
+              var accomID = "$collection/$accom";
+              stdout.writeln('Found accomplishment: $setID/$accom ($accomID)');
 
+              var accomfile = path.basename(element.path);
               var accompath = path.join(langdefaultpath, accomset, accomfile);
               var translatedpath =
                   path.join(collpath, Intl.systemLocale, accomset, accomfile);
@@ -498,8 +500,6 @@ class Accomplishments {
               var data = await File(readpath).readAsString();
               var accomplishment = Accomplishment.fromJson(jsonDecode(data));
 
-              var accomID =
-                  "$collection/${accomfile.substring(0, accomfile.length - 15)}";
               accomplishment.id = accomID;
 
               if (accomplishment.author != "") {
