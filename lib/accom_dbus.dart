@@ -465,7 +465,7 @@ class AccomDBus extends DBusObject {
         case 'get_collection_exists':
           final collection = methodCall.values[0].toNative();
           return DBusMethodSuccessResponse(
-              [DBusBoolean(await api.getCollectionExists(collection))]);
+              [DBusBoolean(api.getCollectionExists(collection))]);
         case 'get_collection_authors':
           final collection = methodCall.values[0].toNative();
           return DBusMethodSuccessResponse(
@@ -480,27 +480,27 @@ class AccomDBus extends DBusObject {
               [dictValueMapper(api.getCollectionData(collection))]);
         case 'list_accoms':
           return DBusMethodSuccessResponse(
-              [arrayValueMapper(await api.listAccoms())]);
+              [arrayValueMapper(api.listAccoms())]);
         case 'list_trophies':
           return DBusMethodSuccessResponse(
-              [arrayValueMapper(await api.listTrophies())]);
+              [arrayValueMapper(api.listTrophies())]);
         case 'list_opportunities':
           return DBusMethodSuccessResponse(
-              [arrayValueMapper<String>(await api.listOpportunities())]);
+              [arrayValueMapper<String>(api.listOpportunities())]);
         case 'list_depending_on':
           final accomID = methodCall.values[0].toNative();
           return DBusMethodSuccessResponse(
-              [arrayValueMapper(await api.listDependingOn(accomID))]);
+              [arrayValueMapper(api.listDependingOn(accomID))]);
         case 'list_unlocked':
           return DBusMethodSuccessResponse(
-              [arrayValueMapper(await api.listUnlocked())]);
+              [arrayValueMapper(api.listUnlocked())]);
         case 'list_unlocked_not_completed':
           // return DBusMethodSuccessResponse(
           //     [arrayValueMapper(await api.list_unlocked_not_completed())]);
           return DBusMethodErrorResponse.notSupported();
         case 'list_collections':
           return DBusMethodSuccessResponse(
-              [arrayValueMapper(await api.listCollections())]);
+              [arrayValueMapper(api.listCollections())]);
         case 'build_viewer_database':
           final data = await api.buildViewerDatabase();
           return DBusMethodSuccessResponse([arrayValueMapper(data)]);

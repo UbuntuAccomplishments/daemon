@@ -679,8 +679,8 @@ class Accomplishments {
   String getCollectionName(String collection) =>
       accomDB.collections[collection]?.name ?? '';
 
-  Future<bool> getCollectionExists(String collection) async =>
-      (await listCollections()).contains(collection);
+  bool getCollectionExists(String collection) =>
+      listCollections().contains(collection);
 
   List<String> getCollectionAuthors(String collection) =>
       accomDB.collections[collection]?.authors ?? [];
@@ -691,29 +691,29 @@ class Accomplishments {
   Map<String, dynamic> getCollectionData(String collection) =>
       accomDB.collections[collection]?.toJson() ?? {};
 
-  Future<List<String>> listAccoms() => accomslist().toList();
+  List<String> listAccoms() => accomslist();
 
-  Future<List<String>> listTrophies() =>
+  List<String> listTrophies() =>
       accomslist().where((accom) => getAccomIsAccomplished(accom)).toList();
 
-  Future<List<String>> listOpportunities() =>
+  List<String> listOpportunities() =>
       accomslist().where((accom) => !getAccomIsAccomplished(accom)).toList();
 
-  Future<List<String>> listDependingOn(String accomID) => accomslist()
+  List<String> listDependingOn(String accomID) => accomslist()
       .where((accom) => getAccomDepends(accom).contains(accomID))
       .toList();
 
-  Future<List<String>> listUnlocked() =>
+  List<String> listUnlocked() =>
       accomslist().where((accom) => getAccomIsUnlocked(accom)).toList();
 
-  Future<List<String>> listUnlockedNotAccomplished() {
+  List<String> listUnlockedNotAccomplished() {
     final accoms = accomslist();
     final filtered = accoms.where(
         (accom) => getAccomIsUnlocked(accom) && !getAccomIsAccomplished(accom));
     return filtered.toList();
   }
 
-  Future<List<String>> listCollections() => collslist().toList();
+  List<String> listCollections() => collslist();
 
   void runScript(String accomID) {
     if (getAccomExists(accomID)) {
@@ -724,7 +724,7 @@ class Accomplishments {
   Future<void> runScripts(List<String> which) async {
     List<String> toSchedule;
     if (which.isEmpty || (which.length == 1 && which[0] == "all")) {
-      toSchedule = await listUnlockedNotAccomplished();
+      toSchedule = listUnlockedNotAccomplished();
     } else {
       toSchedule = which;
     }
@@ -746,7 +746,7 @@ class Accomplishments {
   }
 
   Future<List<Map<String, dynamic>>> buildViewerDatabase() async {
-    final accoms = await listAccoms();
+    final accoms = listAccoms();
     List<Map<String, dynamic>> db = [];
     for (var accom in accoms) {
       db.add({
@@ -933,17 +933,9 @@ class Accomplishments {
     }
   }
 
-  Stream<String> accomslist() async* {
-    for (var k in accomDB.accomplishments.keys) {
-      yield k;
-    }
-  }
+  List<String> accomslist() => accomDB.accomplishments.keys.toList();
 
-  Stream<String> collslist() async* {
-    for (var k in accomDB.collections.keys) {
-      yield k;
-    }
-  }
+  List<String> collslist() => accomDB.collections.keys.toList();
 
   Future<bool> getIsAscCorrect(String filepath) async {
     final file = File(filepath);
