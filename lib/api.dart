@@ -962,6 +962,7 @@ class Accomplishments {
   bool checkIfAccomIsLocked(String accomID) {
     final dep = getAccomDepends(accomID);
     if (dep.isEmpty) {
+      stdout.writeln('Accomplishment $accomID is unlocked');
       return false;
     }
     var locked = false;
@@ -970,7 +971,14 @@ class Accomplishments {
         locked = true;
       }
     }
-    return locked;
+    if (locked) {
+      stdout.writeln(
+          'Accomplishment $accomID is locked because it depends on ${dep.join(',')}');
+      return true;
+    } else {
+      stdout.writeln('Accomplishment $accomID is unlocked');
+      return false;
+    }
   }
 
   Future<void> updateAllLockedAndAccomplishedStatuses() async {
