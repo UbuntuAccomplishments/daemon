@@ -629,21 +629,6 @@ class Accomplishments {
       accomDB.accomplishments[accomID]?.icon ?? '';
 
   String getAccomIconPath(String accomID) {
-    // final imagesdir = path.join(
-    //     config.cacheDirPath, 'trophyimages', getAccomCollection(accomID));
-    // var iconfile = getAccomIcon(accomID);
-    // var iconfilename = path.basenameWithoutExtension(iconfile);
-    // final iconfileext = path.extension(iconfile);
-
-    // if (!getAccomIsUnlocked(accomID)) {
-    //   iconfilename = "$iconfilename-locked";
-    // } else if (!getAccomIsAccomplished(accomID)) {
-    //   iconfilename = "$iconfilename-opportunity";
-    // }
-    // iconfile = "$iconfilename$iconfileext";
-
-    // return path.join(imagesdir, iconfile);
-
     final accom = accomDB.accomplishments[accomID];
     if (accom == null) {
       return '';
