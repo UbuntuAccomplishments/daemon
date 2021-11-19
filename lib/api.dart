@@ -179,24 +179,27 @@ class Accomplishments {
     }
 
     for (var accom in accoms) {
-      final collection = collFromAccomID(accom);
+      var collection = collFromAccomID(accom);
 
-      final ei = getAccomNeedsInfo(accom);
+      var ei = getAccomNeedsInfo(accom);
       if (ei.isNotEmpty) {
         for (var i in ei) {
-          final label =
+          var label =
               accomDB.collections[collection]?.extraInformation[i]?.label;
-          final desc =
+          var desc =
               accomDB.collections[collection]?.extraInformation[i]?.description;
-          final example =
+          var example =
               accomDB.collections[collection]?.extraInformation[i]?.example;
-          final regex = accomDB
+          var regex = accomDB
               .collections[collection]?.extraInformation[i]?.regex?.value;
 
           String? value;
-          final valuefile = File(path.join(trophyextrainfo.path, i));
-          if (await valuefile.exists()) {
-            value = (await valuefile.readAsLines()).first.trimRight();
+          var valuefile = File(path.join(trophyextrainfo.path, i));
+          if (await valuefile.exists() && (await valuefile.stat()).size > 0) {
+            var valuedata = (await valuefile.readAsLines());
+            if (valuedata.isNotEmpty) {
+              value = valuedata.first;
+            }
           }
 
           infoneeded.add({
