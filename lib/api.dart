@@ -694,29 +694,29 @@ class Accomplishments {
   Map<String, dynamic> getCollectionData(String collection) =>
       accomDB.collections[collection]?.toJson() ?? {};
 
-  List<String> listAccoms() => accomslist();
+  List<String> listAccoms() => accomDB.accomplishments.keys.toList();
 
   List<String> listTrophies() =>
-      accomslist().where((accom) => getAccomIsAccomplished(accom)).toList();
+      listAccoms().where((accom) => getAccomIsAccomplished(accom)).toList();
 
   List<String> listOpportunities() =>
-      accomslist().where((accom) => !getAccomIsAccomplished(accom)).toList();
+      listAccoms().where((accom) => !getAccomIsAccomplished(accom)).toList();
 
-  List<String> listDependingOn(String accomID) => accomslist()
+  List<String> listDependingOn(String accomID) => listAccoms()
       .where((accom) => getAccomDepends(accom).contains(accomID))
       .toList();
 
   List<String> listUnlocked() =>
-      accomslist().where((accom) => getAccomIsUnlocked(accom)).toList();
+      listAccoms().where((accom) => getAccomIsUnlocked(accom)).toList();
 
   List<String> listUnlockedNotAccomplished() {
-    final accoms = accomslist();
+    final accoms = listAccoms();
     final filtered = accoms.where(
         (accom) => getAccomIsUnlocked(accom) && !getAccomIsAccomplished(accom));
     return filtered.toList();
   }
 
-  List<String> listCollections() => collslist();
+  List<String> listCollections() => accomDB.collections.keys.toList();
 
   void runScript(String accomID) {
     if (getAccomExists(accomID)) {
@@ -944,10 +944,6 @@ class Accomplishments {
     }
   }
 
-  List<String> accomslist() => accomDB.accomplishments.keys.toList();
-
-  List<String> collslist() => accomDB.collections.keys.toList();
-
   Future<bool> getIsAscCorrect(String filepath) async {
     final file = File(filepath);
     if (!await file.exists()) {
@@ -1004,8 +1000,9 @@ class Accomplishments {
         continue;
       }
       var accomplished = await checkIfAccomIsAccomplished(accom);
-      accomDB.accomplishments[accom]!.accomplished = accomplished;
       if (accomplished) {
+        stdout.writeln('Setting internal data for $accom as accomplished');
+        accomDB.accomplishments[accom]!.accomplished = true;
         accomDB.accomplishments[accom]!.dateAccomplished =
             await getTrophyDateAccomplished(accom);
       } else {
