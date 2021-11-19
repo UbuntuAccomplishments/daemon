@@ -54,7 +54,7 @@ class AccomConfig {
           "share",
           "accomplishments",
         );
-        configDirPath = path.join(path.dirname(snapuserdata!), 'common',
+        configDirPath = path.join(path.dirname(snapuserdata!), 'current',
             '.config', 'accomplishments');
       }
     }
