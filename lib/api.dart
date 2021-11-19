@@ -636,18 +636,18 @@ class Accomplishments {
     return path.join(accom.basePath, 'trophyimages', accom.icon);
   }
 
-  Iterable<String> getAccomNeedsInfo(String accomID) {
+  List<String> getAccomNeedsInfo(String accomID) {
     final needinfo = accomDB.accomplishments[accomID]?.needsInformation;
     if (needinfo == null || needinfo == "") {
       return [];
     }
-    return needinfo.split(",").map((String a) => a.trim());
+    return needinfo.split(",").map((String a) => a.trim()).toList();
   }
 
   String getAccomCollection(String accomID) =>
       accomDB.accomplishments[accomID]?.collection ?? '';
 
-  Iterable<String> getAccomCategories(String accomID) =>
+  List<String> getAccomCategories(String accomID) =>
       accomDB.accomplishments[accomID]?.categories ?? [];
 
   String getAccomDateAccomplished(String accomID) =>
