@@ -996,6 +996,10 @@ class Accomplishments {
     }
 
     final data = await trophyfile.readAsString();
+    if (data.trim().isEmpty) {
+      return '';
+    }
+
     final trophy = Accomplishment.fromJson(jsonDecode(data));
     return trophy.dateAccomplished;
   }
