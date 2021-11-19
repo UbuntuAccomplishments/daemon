@@ -363,6 +363,8 @@ class Accomplishments {
 
   Future<void> reloadAccomDatabase() async {
     accomDB = AccomDB();
+    var accCount = 0;
+
     final installpaths = config.accomsInstallpaths.split(":");
     for (var installpath in installpaths) {
       stdout.writeln('Scanning for collections in $installpath');
@@ -375,8 +377,6 @@ class Accomplishments {
       final collections = dir.list();
       for (var element in await collections.toList()) {
         final collection = path.basename(element.path);
-
-        stdout.writeln('Found collection $collection');
 
         final collpath = path.join(dir.path, collection);
         final aboutpath = path.join(collpath, 'ABOUT');
@@ -403,7 +403,6 @@ class Accomplishments {
           var accomset = path.basename(setssfile.path);
           if (path.extension(accomset) == '.accomplishment') {
             var accom = path.basenameWithoutExtension(accomset);
-            stdout.writeln('Found accomplishment $collection/$accom');
 
             var accompath = path.join(langdefaultpath, accomset);
             var translatedpath =
@@ -469,7 +468,6 @@ class Accomplishments {
             accno = accno + 1;
           } else {
             var setID = "$collection:$accomset";
-            stdout.writeln('Found accomplishment set $setID');
 
             var setdata = {'type': "set", 'name': accomset};
             accomDB.sets[setID] = setdata;
@@ -478,7 +476,6 @@ class Accomplishments {
             for (var element in await accomfiles.toList()) {
               var accom = path.basenameWithoutExtension(element.path);
               var accomID = "$collection/$accom";
-              stdout.writeln('Found accomplishment: $setID/$accom ($accomID)');
 
               var accomfile = path.basename(element.path);
               var accompath = path.join(langdefaultpath, accomset, accomfile);
@@ -568,10 +565,13 @@ class Accomplishments {
           'extra-information': ei,
           'authors': collauthors.toList()
         });
+
+        accCount += accno + 1;
       }
     }
 
-    stdout.writeln('Finished scanning for accomplishments');
+    stdout.writeln(
+        'Finished scanning for accomplishments. Found ${accCount} accomplishments.');
 
     await updateAllLockedAndAccomplishedStatuses();
 
