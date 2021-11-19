@@ -325,7 +325,7 @@ class Accomplishments {
     }
 
     for (var info in infoReqd) {
-      final ei = await getExtraInformation(collection, info);
+      var ei = await getExtraInformation(collection, info);
       if (ei['item'] == null || ei['item'] == "") {
         stdout.writeln(
             "$info is missing for $accomID, is_all_extra_information_available returning False");
@@ -369,34 +369,34 @@ class Accomplishments {
     for (var installpath in installpaths) {
       stdout.writeln('Scanning for collections in $installpath');
 
-      final dir = Directory(path.join(installpath, 'accomplishments'));
+      var dir = Directory(path.join(installpath, 'accomplishments'));
       if (!await dir.exists()) {
         continue;
       }
 
-      final collections = dir.list();
+      var collections = dir.list();
       for (var element in await collections.toList()) {
-        final collection = path.basename(element.path);
+        var collection = path.basename(element.path);
 
-        final collpath = path.join(dir.path, collection);
-        final aboutpath = path.join(collpath, 'ABOUT');
+        var collpath = path.join(dir.path, collection);
+        var aboutpath = path.join(collpath, 'ABOUT');
 
-        final data = await File(aboutpath).readAsString();
-        final meta = CollectionMeta.fromJson(jsonDecode(data));
+        var data = await File(aboutpath).readAsString();
+        var meta = CollectionMeta.fromJson(jsonDecode(data));
 
         if (meta.langdefault == null || meta.name == null) {
           stdout.writeln(aboutpath);
           throw "Accomplishment collection with invalid ABOUT file ";
         }
 
-        final langdefault = meta.langdefault ?? "en";
-        final collectionname = meta.name;
+        var langdefault = meta.langdefault ?? "en";
+        var collectionname = meta.name;
 
         Set<String> collauthors = {};
         Map<String, List<String>> collcategories = {};
 
-        final langdefaultpath = path.join(collpath, langdefault);
-        final setsslist = Directory(langdefaultpath).list();
+        var langdefaultpath = path.join(collpath, langdefault);
+        var setsslist = Directory(langdefaultpath).list();
         var accno = 0;
 
         for (var setssfile in await setsslist.toList()) {
@@ -571,7 +571,7 @@ class Accomplishments {
     }
 
     stdout.writeln(
-        'Finished scanning for accomplishments. Found ${accCount} accomplishments.');
+        'Finished scanning for accomplishments. Found $accCount accomplishments.');
 
     await updateAllLockedAndAccomplishedStatuses();
 
@@ -756,10 +756,10 @@ class Accomplishments {
   Future<void> checkSignatures() async {
     stdout.writeln('Checking for required trophy signatures');
     for (var accomID in accomDB.accomplishments.keys) {
-      final accomFile = File(path.join(config.trophiesPath, '$accomID.trophy'));
-      final accomAscFile = File('${accomFile.path}.asc');
+      var accomFile = File(path.join(config.trophiesPath, '$accomID.trophy'));
+      var accomAscFile = File('${accomFile.path}.asc');
       if (getAccomNeedsSigning(accomID) && (await accomFile.exists())) {
-        final ascExists = await accomAscFile.exists();
+        var ascExists = await accomAscFile.exists();
         if (ascExists && await getIsAscCorrect(accomAscFile.path)) {
           continue;
         }
@@ -769,7 +769,7 @@ class Accomplishments {
 
         stdout.writeln(
             'Requesting signature from accomplishments service for $accomID');
-        final response = await http.post(
+        var response = await http.post(
           Uri.parse(
               'https://ubuntuaccomplishments.herokuapp.com/accomplish/$accomID'),
           body: await accomFile.readAsString(),
@@ -852,7 +852,7 @@ class Accomplishments {
 
       if (needsinfo.isNotEmpty) {
         for (var i in needsinfo) {
-          final extinfo = await getExtraInformation(collection, i);
+          var extinfo = await getExtraInformation(collection, i);
           if (!(cfg[i].trim() == extinfo['item'].trim())) {
             overwrite = true;
             stdout.writeln(
@@ -880,7 +880,7 @@ class Accomplishments {
     if (needsinfo.isNotEmpty) {
       trophy['needs-information'] = needsinfo.join(', ');
       for (var i in needsinfo) {
-        final info = await getExtraInformation(collection, i);
+        var info = await getExtraInformation(collection, i);
         trophy[i] = info['item'];
       }
     }
@@ -977,15 +977,18 @@ class Accomplishments {
   Future<void> updateAllLockedAndAccomplishedStatuses() async {
     final accoms = listAccoms();
     for (var accom in accoms) {
-      final accomplished = await checkIfAccomIsAccomplished(accom);
-      accomDB.accomplishments[accom]?.accomplished = accomplished;
+      if (accomDB.accomplishments[accom] != null) {
+        continue;
+      }
+      var accomplished = await checkIfAccomIsAccomplished(accom);
+      accomDB.accomplishments[accom]!.accomplished = accomplished;
       if (accomplished) {
-        accomDB.accomplishments[accom]?.dateAccomplished =
+        accomDB.accomplishments[accom]!.dateAccomplished =
             await getTrophyDateAccomplished(accom);
       } else {
-        accomDB.accomplishments[accom]?.dateAccomplished = "None";
+        accomDB.accomplishments[accom]!.dateAccomplished = "None";
       }
-      accomDB.accomplishments[accom]?.locked = checkIfAccomIsLocked(accom);
+      accomDB.accomplishments[accom]!.locked = checkIfAccomIsLocked(accom);
     }
   }
 
@@ -1012,7 +1015,7 @@ class Accomplishments {
     final accoms = listDependingOn(accomID);
     List<String> res = [];
     for (var accom in accoms) {
-      final before = accomDB.accomplishments[accom]?.locked ?? true;
+      var before = accomDB.accomplishments[accom]?.locked ?? true;
       accomDB.accomplishments[accom]?.locked = checkIfAccomIsLocked(accom);
       if (before && !(accomDB.accomplishments[accom]?.locked ?? true)) {
         res.add(accom);
