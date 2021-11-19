@@ -1,4 +1,4 @@
-accomplishments-daemon (0.4~focal1) focal; urgency=medium
+accomplishments-daemon (0.1ubuntu4) focal; urgency=medium
 
   * Initial Dart-based rewrite Release.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 # See debhelper(7) (uncomment to enable)
 # output every command that modifies files on the build system.
-#export DH_VERBOSE = 1
+export DH_VERBOSE = 1
 
 
 # see FEATURE AREAS in dpkg-buildflags(1)
@@ -28,6 +28,12 @@ export DEB_LDFLAGS_MAINT_STRIP = -flto=auto
 #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
 
 override_dh_auto_build:
+ifneq (,${http_proxy})
+	git config --global http.proxy ${http_proxy}
+endif
+ifneq (,${https_proxy})
+	git config --global https.proxy ${https_proxy}
+endif
 ifeq (,$(wildcard /tmp/flutter-tools))
 	git clone -b stable --depth 1 https://github.com/flutter/flutter.git /tmp/flutter-tools
 endif

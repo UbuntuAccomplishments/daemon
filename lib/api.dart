@@ -168,7 +168,7 @@ class Accomplishments {
   }
 
   Future<List<Map<String, dynamic>>> getAllExtraInformation() async {
-    final accoms = await listAccoms();
+    final accoms = listAccoms();
 
     final List<Map<String, dynamic>> infoneeded = [];
 
@@ -342,7 +342,7 @@ class Accomplishments {
     final extrainfopath = path.join(config.trophiesPath, ".extrainformation");
     final authfilepath = path.join(extrainfopath, item);
 
-    if (!await getCollectionExists(collection)) {
+    if (!getCollectionExists(collection)) {
       stdout.writeln("No such collection: $collection");
       return {};
     }
@@ -911,8 +911,8 @@ class Accomplishments {
     }
   }
 
-  Future<void> displayUnlockedBubble(accomID) async {
-    final unlocked = (await listDependingOn(accomID)).length;
+  void displayUnlockedBubble(accomID) {
+    final unlocked = listDependingOn(accomID).length;
     if (unlocked != 0) {
       if (config.showNotifications) {
         notify("New opportunities have been unlocked!");
@@ -974,7 +974,7 @@ class Accomplishments {
   }
 
   Future<void> updateAllLockedAndAccomplishedStatuses() async {
-    final accoms = await listAccoms();
+    final accoms = listAccoms();
     for (var accom in accoms) {
       final accomplished = await checkIfAccomIsAccomplished(accom);
       accomDB.accomplishments[accom]?.accomplished = accomplished;
@@ -1004,7 +1004,7 @@ class Accomplishments {
     accomDB.accomplishments[accomID]?.accomplished = true;
     accomDB.accomplishments[accomID]?.dateAccomplished =
         await getTrophyDateAccomplished(accomID);
-    final accoms = await listDependingOn(accomID);
+    final accoms = listDependingOn(accomID);
     List<String> res = [];
     for (var accom in accoms) {
       final before = accomDB.accomplishments[accom]?.locked ?? true;
