@@ -40,12 +40,13 @@ class ScriptsRunner {
     var unlockedNewTrophies = false;
     while (queuesize > 0) {
       final String accomID = scriptsQueue.removeFirst();
-      stdout.writeln("Running $accomID, left on queue: ${queuesize - 1}");
 
       if (await parent.checkIfAccomIsAccomplished(accomID)) {
         unlockedNewTrophies =
             (unlockedNewTrophies) ? true : await parent.accomplish(accomID);
       } else {
+        stdout.writeln("Running $accomID, left on queue: ${queuesize - 1}");
+
         final scriptpath = parent.getAccomScriptPath(accomID);
         if (scriptpath == null) {
           stdout.writeln("...No script for this accomplishment, skipping");
