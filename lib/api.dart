@@ -276,11 +276,16 @@ class Accomplishments {
     if (trophy.startsWith(config.trophiesPath)) {
       if (trophy.endsWith(".asc")) {
         stdout.writeln("Processing signature: $trophy");
-        final valid = await getIsAscCorrect(trophy);
-        if (valid) {
-          processValidTrophyReceived(trophy);
-        } else {
-          stdout.writeln("Invalid .asc signature received from the server!");
+        try {
+          final valid = await getIsAscCorrect(trophy);
+          if (valid) {
+            processValidTrophyReceived(trophy);
+          } else {
+            throw ('Invalid .asc signature');
+          }
+        } catch (_) {
+          stdout.writeln(
+              "Invalid .asc signature received from the server, or other error!");
         }
       } else {
         stdout.writeln("Processing unsigned trophy: $trophy");
