@@ -979,14 +979,14 @@ class Accomplishments {
     return getIsAscCorrect(ascpath);
   }
 
-  bool checkIfAccomIsLocked(String accomID) {
+  Future<bool> checkIfAccomIsLocked(String accomID) async {
     final dep = getAccomDepends(accomID);
     if (dep.isEmpty) {
       return false;
     }
     var locked = false;
     for (var d in dep) {
-      if (!getAccomIsAccomplished(d)) {
+      if (!await checkIfAccomIsAccomplished(d)) {
         locked = true;
       }
     }
@@ -1008,7 +1008,8 @@ class Accomplishments {
       } else {
         accomDB.accomplishments[accom]!.dateAccomplished = "None";
       }
-      accomDB.accomplishments[accom]!.locked = checkIfAccomIsLocked(accom);
+      accomDB.accomplishments[accom]!.locked =
+          await checkIfAccomIsLocked(accom);
     }
   }
 
