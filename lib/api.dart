@@ -780,9 +780,13 @@ class Accomplishments {
           body: await accomFile.readAsString(),
         );
 
-        await accomAscFile.writeAsString(response.body);
-
-        await processReceivedTrophyFile(accomAscFile.path);
+        if (response.statusCode == 200) {
+          await accomAscFile.writeAsString(response.body);
+          await processReceivedTrophyFile(accomAscFile.path);
+        } else {
+          stdout.writeln(
+              'Error ${response.statusCode} received from the Accomplishments service');
+        }
       }
     }
     stdout.writeln('Trophy signatures check has completed');
