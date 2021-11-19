@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -253,7 +254,7 @@ class Accomplishments {
     }
   }
 
-  Future<void> processValidTrophyReceived(String trophy) async {
+  Future<bool> processValidTrophyReceived(String trophy) async {
     stdout.writeln("Valid trophy received...");
     String accomID;
     if (trophy.endsWith(".asc")) {
@@ -267,10 +268,18 @@ class Accomplishments {
     }
     final justUnlocked = await markAsAccomplished(accomID);
     service.trophyReceived(accomID);
-    runScripts(justUnlocked);
+    if (justUnlocked.isNotEmpty) {
+      for (var newAccom in justUnlocked) {
+        if (!scriptsRunner.scriptsQueue.contains(newAccom)) {
+          scriptsRunner.scriptsQueue.add(newAccom);
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
-  Future<void> processReceivedTrophyFile(String trophy) async {
+  Future<bool> processReceivedTrophyFile(String trophy) async {
     stdout.writeln("Trophy file received: validating...");
 
     if (trophy.startsWith(config.trophiesPath)) {
@@ -279,7 +288,7 @@ class Accomplishments {
         try {
           final valid = await getIsAscCorrect(trophy);
           if (valid) {
-            processValidTrophyReceived(trophy);
+            return processValidTrophyReceived(trophy);
           } else {
             throw ('Invalid .asc signature');
           }
@@ -292,10 +301,11 @@ class Accomplishments {
         if (getAccomNeedsSigning(path.basenameWithoutExtension(trophy))) {
           stdout.writeln("Trophy needs signing, skipping");
         } else {
-          processValidTrophyReceived(trophy);
+          return processValidTrophyReceived(trophy);
         }
       }
     }
+    return false;
   }
 
   Future<void> writeExtraInformationFile(String item, String? data) async {
@@ -735,7 +745,6 @@ class Accomplishments {
       }
     }
     await scriptsRunner.startScriptRunner();
-    await checkSignatures();
   }
 
   Future<List<Map<String, dynamic>>> buildViewerDatabase() async {
@@ -760,6 +769,7 @@ class Accomplishments {
 
   Future<void> checkSignatures() async {
     stdout.writeln('Checking for required trophy signatures');
+    var unlockedNewTrophies = false;
     for (var accomID in accomDB.accomplishments.keys) {
       var accomFile = File(path.join(config.trophiesPath, '$accomID.trophy'));
       var accomAscFile = File('${accomFile.path}.asc');
@@ -782,7 +792,9 @@ class Accomplishments {
 
         if (response.statusCode == 200) {
           await accomAscFile.writeAsString(response.body);
-          await processReceivedTrophyFile(accomAscFile.path);
+          unlockedNewTrophies = unlockedNewTrophies
+              ? true
+              : await processReceivedTrophyFile(accomAscFile.path);
         } else {
           stdout.writeln(
               'Error ${response.statusCode} received from the Accomplishments service');
@@ -790,6 +802,9 @@ class Accomplishments {
       }
     }
     stdout.writeln('Trophy signatures check has completed');
+    if (unlockedNewTrophies && scriptsRunner.state != ScriptsState.running) {
+      Timer(Duration(seconds: 30), () => runScripts([]));
+    }
   }
 
   Future<bool> getPublishedStatus() async {
@@ -828,8 +843,7 @@ class Accomplishments {
       }
       displayAccomplishedBubble(accomID);
       displayUnlockedBubble(accomID);
-      final justUnlocked = await markAsAccomplished(accomID);
-      runScripts(justUnlocked);
+      await markAsAccomplished(accomID);
     }
 
     return true;

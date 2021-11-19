@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
@@ -36,12 +37,14 @@ class ScriptsRunner {
       parent.service.scriptrunnerStart();
     }
 
+    var unlockedNewTrophies = false;
     while (queuesize > 0) {
       final String accomID = scriptsQueue.removeFirst();
       stdout.writeln("Running $accomID, left on queue: ${queuesize - 1}");
 
       if (await parent.checkIfAccomIsAccomplished(accomID)) {
-        await parent.accomplish(accomID);
+        unlockedNewTrophies =
+            (unlockedNewTrophies) ? true : await parent.accomplish(accomID);
       } else {
         final scriptpath = parent.getAccomScriptPath(accomID);
         if (scriptpath == null) {
@@ -90,5 +93,8 @@ class ScriptsRunner {
     }
 
     state = ScriptsState.stopped;
+    if (unlockedNewTrophies) {
+      Timer(Duration(seconds: 30), () => parent.runScripts([]));
+    }
   }
 }
