@@ -54,7 +54,7 @@ class AccomConfig {
           "share",
           "accomplishments",
         );
-        configDirPath = path.join(path.dirname(snapuserdata!), 'current',
+        configDirPath = path.join(path.dirname(snapuserdata!), 'common',
             '.config', 'accomplishments');
       }
     }
@@ -141,7 +141,14 @@ class AccomConfig {
     log("...setting accomplishments install paths to: $accomsInstallpaths");
     log('You can set this to different locations in your config file.');
 
-    trophiesPath = path.join(configDirPath, "trophies");
+    final snapdir = Platform.environment['SNAP'];
+    var parentDir = (snapdir != null &&
+            snapdir != "" &&
+            snapdir.contains('ubuntu-accomplishments'))
+        ? Platform.environment['SNAP_USER_COMMON']
+        : Platform.environment['HOME'];
+    parentDir ??= configDirPath;
+    trophiesPath = path.join(parentDir, "trophies");
     log("...setting trophies path to: $trophiesPath");
 
     if (!Directory(trophiesPath).existsSync()) {
