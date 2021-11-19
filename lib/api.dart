@@ -996,7 +996,7 @@ class Accomplishments {
   Future<void> updateAllLockedAndAccomplishedStatuses() async {
     final accoms = listAccoms();
     for (var accom in accoms) {
-      if (accomDB.accomplishments[accom] != null) {
+      if (accomDB.accomplishments[accom] == null) {
         continue;
       }
       var accomplished = await checkIfAccomIsAccomplished(accom);
