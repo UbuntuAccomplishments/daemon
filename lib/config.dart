@@ -94,7 +94,7 @@ class AccomConfig {
   }
 
   void loadConfigFile() {
-    final cfile = File(path.join(configDirPath, ".accomplishments"));
+    final cfile = File(path.join(configDirPath, "config.json"));
 
     if (cfile.existsSync()) {
       final data = cfile.readAsStringSync();
@@ -133,13 +133,7 @@ class AccomConfig {
   }
 
   void setDefaultConfig() {
-    final accompath = "$configDirPath:$dataDirPath";
     log('Configuration file not found...creating it!');
-
-    hasVerif = false;
-    accomsInstallpaths = accompath;
-    log("...setting accomplishments install paths to: $accomsInstallpaths");
-    log('You can set this to different locations in your config file.');
 
     final snapdir = Platform.environment['SNAP'];
     var parentDir = (snapdir != null &&
@@ -149,6 +143,12 @@ class AccomConfig {
         : Platform.environment['HOME'];
     parentDir ??= configDirPath;
     trophiesPath = path.join(parentDir, "trophies");
+
+    hasVerif = false;
+    accomsInstallpaths = "$trophiesPath:$dataDirPath";
+    log("...setting accomplishments install paths to: $accomsInstallpaths");
+    log('You can set this to different locations in your config file.');
+
     log("...setting trophies path to: $trophiesPath");
 
     if (!Directory(trophiesPath).existsSync()) {
@@ -160,7 +160,7 @@ class AccomConfig {
 
   void writeConfigFile() {
     log("Writing the configuration file");
-    final cfile = File(path.join(configDirPath, ".accomplishments"));
+    final cfile = File(path.join(configDirPath, "config.json"));
     Map<String, String> config = {};
 
     config['has_u1'] = hasU1.toString();
@@ -173,7 +173,7 @@ class AccomConfig {
 
   Future<void> writeConfigFileItem(String item, String value) async {
     log("Set configuration file value: $item = $value");
-    final cfile = File(path.join(configDirPath, ".accomplishments"));
+    final cfile = File(path.join(configDirPath, "config.json"));
     final data = await cfile.readAsString();
     Map<String, String> config = jsonDecode(data);
     config[item] = value;
@@ -183,7 +183,7 @@ class AccomConfig {
 
   Future<dynamic> getConfigValue(String item) async {
     log("Returning configuration values for: $item");
-    final configfile = File(path.join(configDirPath, ".accomplishments"));
+    final configfile = File(path.join(configDirPath, "config.json"));
     final data = await configfile.readAsString();
     Map<String, String> config = jsonDecode(data);
     if (config[item] != null) {
