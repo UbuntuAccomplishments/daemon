@@ -693,8 +693,10 @@ class Accomplishments {
 
   List<String> listUnlockedNotAccomplished() {
     final accoms = accomslist();
+    stdout.writeln('All accomplishments: ${accoms.join(',')}');
     final filtered = accoms.where(
         (accom) => getAccomIsUnlocked(accom) && !getAccomIsAccomplished(accom));
+    stdout.writeln('Unlocked and not accomplished ${filtered.join(',')}');
     return filtered.toList();
   }
 
