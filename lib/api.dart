@@ -703,7 +703,7 @@ class Accomplishments {
       listAccoms().where((accom) => !getAccomIsAccomplished(accom)).toList();
 
   List<String> listDependingOn(String accomID) => listAccoms()
-      .where((accom) => getAccomDepends(accom).contains(accomID))
+      .where((accom) => getAccomDepends(accomID).contains(accom))
       .toList();
 
   List<String> listUnlocked() =>

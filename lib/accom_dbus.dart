@@ -222,7 +222,7 @@ class AccomDBus extends DBusObject {
     final listDependingOnMethod =
         DBusIntrospectMethod('list_depending_on', args: [
       DBusIntrospectArgument(DBusSignature('s'), DBusArgumentDirection.in_),
-      DBusIntrospectArgument(DBusSignature('as'), DBusArgumentDirection.out),
+      DBusIntrospectArgument(DBusSignature('a{sv}'), DBusArgumentDirection.out),
     ]);
     final listUnlockedMethod = DBusIntrospectMethod('list_unlocked', args: [
       DBusIntrospectArgument(DBusSignature('as'), DBusArgumentDirection.out),
@@ -489,8 +489,16 @@ class AccomDBus extends DBusObject {
               [arrayValueMapper<String>(api.listOpportunities())]);
         case 'list_depending_on':
           final accomID = methodCall.values[0].toNative();
-          return DBusMethodSuccessResponse(
-              [arrayValueMapper(api.listDependingOn(accomID))]);
+          final map = Map.fromEntries(
+            api
+                .listDependingOn(accomID)
+                .where((dep) =>
+                    dep.isNotEmpty &&
+                    api.accomDB.accomplishments.containsKey(dep))
+                .map((item) =>
+                    MapEntry(item, api.accomDB.accomplishments[item]!)),
+          );
+          return DBusMethodSuccessResponse([dictValueMapper(map)]);
         case 'list_unlocked':
           return DBusMethodSuccessResponse(
               [arrayValueMapper(api.listUnlocked())]);
@@ -545,7 +553,12 @@ class AccomDBus extends DBusObject {
       if (value is Map) {
         return MapEntry(DBusString(key), DBusVariant(dictValueMapper(value)));
       }
-      throw DBusNotSupportedException(DBusMethodErrorResponse.notSupported());
+      try {
+        return MapEntry(
+            DBusString(key), DBusVariant(dictValueMapper(value.toJson())));
+      } catch (e) {
+        throw DBusNotSupportedException(DBusMethodErrorResponse.notSupported());
+      }
     }));
   }
 
