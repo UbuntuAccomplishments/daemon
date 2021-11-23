@@ -11,11 +11,11 @@ environment:
 #   path: ^1.8.0
 
 dev_dependencies:
-  build_runner: ^2.1.4
+  build_runner: ^2.1.5
   json_serializable: ^6.0.1
   lints: ^1.0.0
 dependencies: 
-  dbus: ^0.6.3
+  dbus: ^0.6.6
   desktop_notifications: ^0.6.1
   encrypt: ^5.0.1
   glob: ^2.0.2
