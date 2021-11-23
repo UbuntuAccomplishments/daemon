@@ -702,8 +702,14 @@ class Accomplishments {
   List<String> listOpportunities() =>
       listAccoms().where((accom) => !getAccomIsAccomplished(accom)).toList();
 
+  // The trophies that accomID depends upon
   List<String> listDependingOn(String accomID) => listAccoms()
       .where((accom) => getAccomDepends(accomID).contains(accom))
+      .toList();
+
+  // The trophies that depend on accomID
+  List<String> listDependencies(String accomID) => listAccoms()
+      .where((accom) => getAccomDepends(accom).contains(accomID))
       .toList();
 
   List<String> listUnlocked() =>
@@ -937,7 +943,7 @@ class Accomplishments {
   }
 
   void displayUnlockedBubble(accomID) {
-    final unlocked = listDependingOn(accomID).length;
+    final unlocked = listDependencies(accomID).length;
     if (unlocked != 0) {
       if (config.showNotifications) {
         notify("New opportunities have been unlocked!");
@@ -1034,7 +1040,7 @@ class Accomplishments {
     accomDB.accomplishments[accomID]?.accomplished = true;
     accomDB.accomplishments[accomID]?.dateAccomplished =
         await getTrophyDateAccomplished(accomID);
-    final accoms = listDependingOn(accomID);
+    final accoms = listDependencies(accomID);
     List<String> res = [];
     for (var accom in accoms) {
       var before = accomDB.accomplishments[accom]?.locked ?? true;
