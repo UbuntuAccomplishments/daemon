@@ -792,8 +792,7 @@ class Accomplishments {
         stdout.writeln(
             'Requesting signature from accomplishments service for $accomID');
         var response = await http.post(
-          Uri.parse(
-              'https://ubuntuaccomplishments.herokuapp.com/accomplish/$accomID'),
+          Uri.parse('https://ubuntu-accomplishments.org/accomplish/$accomID'),
           body: await accomFile.readAsString(),
         );
 
