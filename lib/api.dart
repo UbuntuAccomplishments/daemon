@@ -641,6 +641,7 @@ class Accomplishments {
     if (res != null && File(res).existsSync()) {
       return res;
     }
+    return null;
   }
 
   String getAccomIcon(String accomID) =>

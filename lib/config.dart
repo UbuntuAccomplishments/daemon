@@ -101,23 +101,23 @@ class AccomConfig {
       Map<String, dynamic> config = jsonDecode(data);
       if (config.isNotEmpty) {
         log("Loading configuration file: $cfile");
-        final _accomsInstallpaths = config['accompath'];
-        if (_accomsInstallpaths != null) {
-          accomsInstallpaths = _accomsInstallpaths;
+        final accomsInstallpaths = config['accompath'];
+        if (accomsInstallpaths != null) {
+          this.accomsInstallpaths = accomsInstallpaths;
           log("...setting accomplishments install paths to: $accomsInstallpaths");
         }
-        final _trophiesPath = config['trophypath'];
-        if (_trophiesPath != null) {
-          trophiesPath = _trophiesPath;
-          log("...setting trophies path to: $_trophiesPath");
+        final trophiesPath = config['trophypath'];
+        if (trophiesPath != null) {
+          this.trophiesPath = trophiesPath;
+          log("...setting trophies path to: $trophiesPath");
         }
-        final _hasU1 = config['has_u1'];
-        if (_hasU1 != null) {
-          hasU1 = _hasU1.toLowerCase() == 'true';
+        final hasU1 = config['has_u1'];
+        if (hasU1 != null) {
+          this.hasU1 = hasU1.toLowerCase() == 'true';
         }
-        final _hasVerif = config['has_verif'];
-        if (_hasVerif != null) {
-          hasVerif = _hasVerif.toLowerCase() == 'true';
+        final hasVerif = config['has_verif'];
+        if (hasVerif != null) {
+          this.hasVerif = hasVerif.toLowerCase() == 'true';
         }
         if (config['staging'] != null) {
           matrixUsername = stagindId;
